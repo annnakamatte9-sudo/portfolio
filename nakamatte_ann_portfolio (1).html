@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nakamatte Ann — Data Science Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d0d0d;
+  --ink-soft: #3a3a3a;
+  --ink-muted: #888;
+  --cream: #f8f5f0;
+  --cream-dark: #f0ebe2;
+  --gold: #b8935a;
+  --gold-light: #d4aa7d;
+  --gold-pale: #f5ead8;
+  --charcoal: #141414;
+  --charcoal-2: #1e1e1e;
+  --white: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --border-gold: rgba(184,147,90,0.3);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  mix-blend-mode: multiply;
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.35s ease, width 0.2s, height 0.2s, opacity 0.2s;
+  opacity: 0.6;
+}
+
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 60px;
+  background: rgba(248,245,240,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s ease;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left {
+  background: var(--charcoal);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 120px 64px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 20% 80%, rgba(184,147,90,0.12) 0%, transparent 60%);
+}
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+  position: relative;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--gold);
+}
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 5.5vw, 80px);
+  font-weight: 300;
+  line-height: 1.0;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  position: relative;
+}
+.hero-name-italic {
+  font-style: italic;
+  color: var(--gold-light);
+}
+.hero-divider {
+  width: 48px; height: 1px;
+  background: var(--gold);
+  margin: 28px 0;
+  position: relative;
+}
+.hero-desc {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.45);
+  max-width: 340px;
+  position: relative;
+}
+.hero-tags {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-top: 40px;
+  position: relative;
+}
+.hero-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+.hero-right {
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 64px 80px;
+  position: relative;
+}
+.hero-right::before {
+  content: 'N';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 400px;
+  font-weight: 300;
+  color: rgba(0,0,0,0.04);
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-stat {
+  margin-bottom: 40px;
+}
+.hero-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.hero-stat-num span { color: var(--gold); }
+.hero-stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.hero-sep { width: 1px; height: 60px; background: var(--border); margin: 8px 0 40px; }
+.scroll-hint {
+  position: absolute;
+  bottom: 40px; left: 64px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+.scroll-line {
+  width: 40px; height: 1px;
+  background: rgba(255,255,255,0.2);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--gold);
+  animation: scrollline 2s ease-in-out infinite;
+}
+@keyframes scrollline {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Sections */
+section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+section.visible { opacity: 1; transform: translateY(0); }
+
+.section-wrap { padding: 100px 60px; }
+.section-wrap.alt { background: var(--white); }
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 64px;
+}
+.section-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.section-title-wrap {}
+.section-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.section-title em { font-style: italic; color: var(--gold); }
+
+/* About */
+.about-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-text {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+.about-text p + p { margin-top: 20px; }
+.about-text strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+.skills-panel {}
+.skills-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+  display: flex; align-items: center; gap: 10px;
+}
+.skills-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-gold);
+}
+.skill-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.skill-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.skill-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.skill-pct {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--gold);
+}
+.skill-track {
+  height: 2px;
+  background: var(--cream-dark);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.skill-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 1px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Project */
+.project-outer {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--white);
+  position: relative;
+}
+.project-outer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(180deg, var(--gold), var(--gold-light));
+}
+.project-top {
+  background: var(--charcoal);
+  padding: 48px 52px;
+  position: relative;
+  overflow: hidden;
+}
+.project-top::after {
+  content: 'UG SCHOLAR';
+  position: absolute;
+  right: -20px; bottom: -30px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 100px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.04);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.project-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(184,147,90,0.3);
+  padding: 5px 14px;
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+.project-badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.project-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.0;
+  margin-bottom: 12px;
+}
+.project-name em { font-style: italic; color: var(--gold-light); }
+.project-tagline {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  max-width: 480px;
+  line-height: 1.6;
+}
+.project-body { padding: 48px 52px; }
+.project-desc {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  margin-bottom: 40px;
+  border-left: 2px solid var(--gold-pale);
+  padding-left: 20px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+.feature-card {
+  border: 1px solid var(--border);
+  padding: 22px 24px;
+  border-radius: 4px;
+  background: var(--cream);
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+.feature-card:hover { border-color: var(--border-gold); transform: translateY(-2px); }
+.feature-card:hover::before { width: 100%; }
+.feature-icon { font-size: 20px; margin-bottom: 10px; }
+.feature-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.feature-desc {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+.project-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.unique-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--charcoal);
+  color: var(--gold-light);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 8px 18px;
+  border-radius: 2px;
+}
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tech-pill {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  background: var(--cream-dark);
+  padding: 5px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+
+/* Timeline */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, var(--gold) 0%, var(--border) 100%);
+}
+.tl-item {
+  position: relative;
+  padding-bottom: 48px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.tl-item.visible { opacity: 1; transform: translateX(0); }
+.tl-dot {
+  position: absolute;
+  left: -34px;
+  top: 5px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--gold);
+  transition: background 0.2s;
+}
+.tl-item:hover .tl-dot { background: var(--gold); }
+.tl-item.active .tl-dot {
+  background: var(--gold);
+  box-shadow: 0 0 0 4px var(--gold-pale);
+}
+.tl-date {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.tl-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.tl-body {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  max-width: 560px;
+}
+
+/* Contact */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+.contact-intro {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1.3;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.contact-intro em { font-style: italic; color: var(--gold); }
+.contact-sub {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--ink-muted);
+}
+.contact-cards { display: flex; flex-direction: column; gap: 16px; }
+.contact-card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px 24px;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  color: inherit;
+}
+.contact-card:hover {
+  border-color: var(--border-gold);
+  transform: translateX(4px);
+}
+.contact-icon {
+  width: 40px; height: 40px;
+  background: var(--charcoal);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.contact-info-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 3px;
+}
+.contact-info-val {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink);
+}
+.contact-card-plain {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px 24px;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Footer */
+footer {
+  background: var(--charcoal);
+  padding: 36px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.footer-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+}
+.footer-name span { color: var(--gold); }
+.footer-copy {
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-right { display: none; }
+  .hero-left { padding: 120px 32px 80px; }
+  nav { padding: 16px 28px; }
+  .nav-links { display: none; }
+  .section-wrap { padding: 64px 28px; }
+  .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .project-top, .project-body { padding: 32px 28px; }
+  footer { padding: 28px; flex-direction: column; text-align: center; }
+  .section-title { font-size: 36px; }
+  .project-footer { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">Nakamatte <span>Ann</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#project">Project</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-left">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-eyebrow">Portfolio 2025 – 2026</div>
+    <div class="hero-name">
+      Nakamatte<br>
+      <span class="hero-name-italic">Ann</span>
+    </div>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">First-year Data Science student exploring the intersection of technology, education, and inclusive digital access.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">BSc Data Science</span>
+      <span class="hero-tag">Year 1 · Sem 2</span>
+      <span class="hero-tag">Sep 2025 Intake</span>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="hero-stat-num">1<span>st</span></div>
+      <div class="hero-stat-label">Year of Study</div>
+    </div>
+    <div class="hero-sep"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1</div>
+      <div class="hero-stat-label">Featured Project</div>
+    </div>
+    <div class="hero-sep"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2<span>+</span></div>
+      <div class="hero-stat-label">Unique Features Built</div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <div class="section-title-wrap">
+        <div class="section-label">About</div>
+        <h2 class="section-title">Who I <em>am</em></h2>
+      </div>
+    </div>
+    <div class="about-layout">
+      <div class="about-text">
+        <p>I am <strong>Nakamatte Ann</strong>, a first-year Data Science student with a growing interest in how data-driven solutions can transform everyday challenges — particularly in education and access to information.</p>
+        <p>Since joining university in <strong>September 2025</strong>, my academic journey has given me foundational skills in data analysis, programming, and software development. I believe technology is most impactful when it is built with the user in mind — accessible, intuitive, and inclusive.</p>
+        <p>During my recess term, I contributed to a collaborative project addressing real barriers in digital education across Uganda and beyond — bringing together design thinking, technical implementation, and user-centred values.</p>
+      </div>
+      <div class="skills-panel">
+        <div class="skills-title">Core Skills</div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Data Analysis</span><span class="skill-pct">75%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-width="75"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Python</span><span class="skill-pct">65%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-width="65"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Web Development</span><span class="skill-pct">60%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-width="60"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">Database Systems</span><span class="skill-pct">55%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-width="55"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-top"><span class="skill-name">UX Research</span><span class="skill-pct">50%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-width="50"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT -->
+<section id="project">
+  <div class="section-wrap alt">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <div class="section-title-wrap">
+        <div class="section-label">Featured Project</div>
+        <h2 class="section-title">Recess <em>Work</em></h2>
+      </div>
+    </div>
+    <div class="project-outer">
+      <div class="project-top">
+        <div class="project-badge">Group Project · Recess 2026</div>
+        <div class="project-name">UG <em>Scholar</em></div>
+        <div class="project-tagline">An inclusive digital learning platform built for Uganda and beyond.</div>
+      </div>
+      <div class="project-body">
+        <p class="project-desc">UG Scholar is an educational platform designed to make digital learning more accessible across Uganda. Similar in concept to Google Classroom and Moodle, it provides a structured online learning environment — but goes further by addressing two real barriers students face: language diversity and age-appropriate content delivery.</p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <div class="feature-name">Language Translation</div>
+            <div class="feature-desc">Supports multiple local languages, breaking down literacy barriers so learners can engage in their native tongue.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-name">Age Restriction System</div>
+            <div class="feature-desc">Content is filtered by age group, ensuring learners only access material appropriate to their developmental stage.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <div class="feature-name">Course Management</div>
+            <div class="feature-desc">Educators can upload materials, set assignments, and track student progress in a structured digital classroom.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <div class="feature-name">User Roles</div>
+            <div class="feature-desc">Distinct roles for students, educators, and administrators allow for organised, role-based platform interactions.</div>
+          </div>
+        </div>
+        <div class="project-footer">
+          <span class="unique-badge">✦ Unique: Multilingual + Age-Safe Learning</span>
+          <div class="tech-list">
+            <span class="tech-pill">Web Platform</span>
+            <span class="tech-pill">User Authentication</span>
+            <span class="tech-pill">Database Design</span>
+            <span class="tech-pill">Language API</span>
+            <span class="tech-pill">Role-Based Access</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <div class="section-title-wrap">
+        <div class="section-label">Academic Journey</div>
+        <h2 class="section-title">My <em>Path</em></h2>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">September 2025 — Semester 1</div>
+        <div class="tl-heading">Began BSc Data Science</div>
+        <p class="tl-body">Foundational coursework in mathematics, programming, and introduction to data structures. Built a strong base in analytical thinking and computational problem solving.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date">Early 2026 — Semester 2</div>
+        <div class="tl-heading">Core Data Science Modules</div>
+        <p class="tl-body">Deepened knowledge in database systems, statistical analysis, and web technologies. Developed practical skills in Python and SQL with applied projects.</p>
+      </div>
+      <div class="tl-item active">
+        <div class="tl-dot"></div>
+        <div class="tl-date">2026 — Recess Term</div>
+        <div class="tl-heading">UG Scholar — Group Development Project</div>
+        <p class="tl-body">Collaborated with peers to design and develop UG Scholar, a multilingual educational platform. Contributed to frontend development, user experience research, and system design documentation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap alt">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <div class="section-title-wrap">
+        <div class="section-label">Contact</div>
+        <h2 class="section-title">Get in <em>Touch</em></h2>
+      </div>
+    </div>
+    <div class="contact-layout">
+      <div>
+        <div class="contact-intro">Let's <em>connect</em> and build something meaningful.</div>
+        <p class="contact-sub">Whether you have a question about my work, want to collaborate, or simply want to connect — my inbox is always open.</p>
+      </div>
+      <div class="contact-cards">
+        <a class="contact-card" href="mailto:annnakamatte9@gmail.com">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-info-label">Email</div>
+            <div class="contact-info-val">annnakamatte9@gmail.com</div>
+          </div>
+        </a>
+        <a class="contact-card" href="tel:+256784444986">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-info-label">Phone</div>
+            <div class="contact-info-val">+256 784 444 986</div>
+          </div>
+        </a>
+        <div class="contact-card-plain">
+          <div class="contact-icon">🎓</div>
+          <div>
+            <div class="contact-info-label">Programme</div>
+            <div class="contact-info-val">BSc Data Science — Year 1, Semester 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-name">Nakamatte <span>Ann</span></div>
+  <div class="footer-copy">Data Science · Year 1 · Portfolio 2026</div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
+});
+function animateRing() {
+  rx += (mx - rx - 16) * 0.12;
+  ry += (my - ry - 16) * 0.12;
+  ring.style.transform = `translate(${rx}px, ${ry}px)`;
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a, button, .feature-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform += ' scale(2)';
+    ring.style.width = '48px';
+    ring.style.height = '48px';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width = '32px';
+    ring.style.height = '32px';
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('section, .tl-item').forEach(el => observer.observe(el));
+
+// Skill bars animate on scroll
+const skillObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.skill-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('#about').forEach(el => skillObserver.observe(el));
+</script>
+</body>
+</html>
